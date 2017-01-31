@@ -40,5 +40,10 @@ class Chip8 (pyglet.window.Window):
         for i in range(len(fontset)):
             self.memory[i] = fontset[i]
 
+    def load_rom(self, rom_path)
+        rom = open(rom_path, "rb").read()
+
+        for i in range(len(rom)):
+            self.memory(i + 0x200) = ord(rom[i])
 
 
