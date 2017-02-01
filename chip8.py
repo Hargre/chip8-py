@@ -25,7 +25,7 @@ class Chip8 (pyglet.window.Window):
         Definitions for the Opcodes
     """
     def _0NNN(self):
-        funcmap[self.opcode & 0xF0FF]()
+        self.funcmap[self.opcode & 0xF0FF]()
 
     # 0x00E0: Clears the screen
     def _00E0(self):
@@ -47,6 +47,11 @@ class Chip8 (pyglet.window.Window):
         self.stack[self.sp] = self.pc
         self.sp += 1
         self.pc = self.opcode & 0x0FFF
+
+    # 0x3XNN: Skips instruction if Vx equals NN
+    def _3XNN(self):
+        if self.registers[self.vx] == (self.opcode & 0x00FF)
+            self.pc += 2
 
     def __init__(self):
         self.pc     = 0x200
