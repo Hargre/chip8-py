@@ -174,6 +174,11 @@ class Chip8 (pyglet.window.Window):
         if self.key[self.vx] != 0:
             self.pc += 2
 
+    # Skips instruction if key stored in Vx is not pressed
+    def _EXA1(self):
+        if self.key[self.vx] == 0:
+            self.pc += 2
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
