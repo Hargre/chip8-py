@@ -122,6 +122,11 @@ class Chip8 (pyglet.window.Window):
 
         self.registers[self.vx] = self.registers[self.vy] - self.registers[self.vx]
 
+    # 0x8XYE: Shifts Vx left by one. Sets VF to the MSB of Vx before-shift
+    def _8XYE(self):
+        self.registers[0xF] = self.registers[self.vx] >> 7
+        self.registers[self.vx] <<= 1
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
