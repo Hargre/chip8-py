@@ -186,6 +186,18 @@ class Chip8 (pyglet.window.Window):
     def _FX07(self):
         self.registers[self.vx] = self.delay_timer
 
+    # 0xFX0A: Waits for a key press and stores its value in Vx
+    def _FX0A(self):
+        key_press = False
+
+        for i in range(16):
+            if self.key[i] != 0:
+                self.registers[self.vx] = i
+                key_press = True
+
+        if !key_press:
+            self.pc -= 2
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
