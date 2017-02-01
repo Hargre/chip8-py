@@ -96,7 +96,17 @@ class Chip8 (pyglet.window.Window):
             self.registers[0xF] = 1
         else:
             self.registers[0xF] = 0
+
         self.registers[self.vx] += self.registers[self.vy]
+
+    # 0x8XY5: Subtracts Vy from Vx. Sets VF to 0 if there's borrow, 1 otherwise
+    def _8XY5(self):
+        if self.registers[self.vx] < self.registers[self.vy]:
+            self.registers[0xF] = 0
+        else:
+            self.registers[0xF] = 1
+            
+        self.registers[self.vx] -= self.registers[self.vy]
 
     def __init__(self):
         self.pc     = 0x200
