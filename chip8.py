@@ -42,6 +42,12 @@ class Chip8 (pyglet.window.Window):
     def _1NNN(self):
         self.pc = self.opcode & 0x0FFF
 
+    # 0x2NNN: Calls subroutine at NNN
+    def _2NNN(self):
+        self.stack[self.sp] = self.pc
+        self.sp += 1
+        self.pc = self.opcode & 0x0FFF
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
