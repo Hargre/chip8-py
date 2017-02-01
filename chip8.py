@@ -239,6 +239,47 @@ class Chip8 (pyglet.window.Window):
             self.registers[i] = self.memory[self.index + i]
 
     def __init__(self):
+        self.funcmap = {
+            0x0000: self._0NNN,
+            0x00E0: self._00E0,
+            0x00EE: self._00EE,
+            0x1000: self._1NNN,
+            0x2000: self._2NNN,
+            0x3000: self._3XNN,
+            0x4000: self._4XNN,
+            0x5000: self._5XY0,
+            0x6000: self._6XNN,
+            0x7000: self._7XNN,
+            0x8000: self._8NNN,
+            0x8FF0: self._8XY0,
+            0x8FF1: self._8XY1,
+            0x8FF2: self._8XY2,
+            0x8FF3: self._8XY3,
+            0x8FF4: self._8XY4,
+            0x8FF5: self._8XY5,
+            0x8FF6: self._8XY6,
+            0x8FF7: self._8XY7,
+            0x8FFE: self._8XYE,
+            0x9000: self._9XY0,
+            0xA000: self._ANNN,
+            0xB000: self._BNNN,
+            0xC000: self._CXNN,
+            0xD000: self._DXYN,
+            0xE000: self._ENNN,
+            0xE09E: self._EX9E,
+            0xE0A1: self._EXA1,
+            0xF000: self._FNNN,
+            0xF007: self._FX07,
+            0xF00A: self._FX0A,
+            0xF015: self._FX15,
+            0xF018: self._FX18,
+            0xF01E: self._FX1E,
+            0xF029: self._FX29,
+            0xF033: self._FX33,
+            0xF055: self._FX55,
+            0xF065: self._FX65
+        }
+
         self.pc     = 0x200
         self.opcode = 0
         self.index  = 0
