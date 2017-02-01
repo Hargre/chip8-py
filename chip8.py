@@ -67,6 +67,10 @@ class Chip8 (pyglet.window.Window):
     def _6XNN(self):
         self.registers[self.vx] = (self.opcode & 0x00FF)
 
+    # 0x7XNN: Adds NN to Vx
+    def _7XNN(self):
+        self.registers[self.vx] += (self.opcode & 0x00FF)
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
