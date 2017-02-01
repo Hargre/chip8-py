@@ -50,7 +50,12 @@ class Chip8 (pyglet.window.Window):
 
     # 0x3XNN: Skips instruction if Vx equals NN
     def _3XNN(self):
-        if self.registers[self.vx] == (self.opcode & 0x00FF)
+        if self.registers[self.vx] == (self.opcode & 0x00FF):
+            self.pc += 2
+
+    # 0x4XNN: Skips instruction if Vx doesn't equal NN
+    def _4XNN(self):
+        if self.registers[self.vx] != (self.opcode & 0x00FF):
             self.pc += 2
 
     def __init__(self):
