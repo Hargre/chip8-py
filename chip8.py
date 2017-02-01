@@ -40,10 +40,44 @@ class Chip8 (pyglet.window.Window):
         for i in range(len(fontset)):
             self.memory[i] = fontset[i]
 
-    def load_rom(self, rom_path)
+    def load_rom(self, rom_path):
         rom = open(rom_path, "rb").read()
 
         for i in range(len(rom)):
-            self.memory(i + 0x200) = ord(rom[i])
+            self.memory[i + 0x200] = ord(rom[i])
+
+    def emulate_cycle(self):
+        """ Fetch
+            Get two bytes from memory, combine them into opcode word
+        """
+        self.opcode = self.memory[self.pc] << 8 | self.memory[self.pc + 1]
+
+        """ Decode
+            Reads first nibble from opcode, switches to and executes matching
+            instruction.
+            Vx and Vy represent general purpose registers, with associated 
+            values stored in the 2nd and 3rd nibbles.
+            The PC is updated before executing the opcode in order to 
+            jump-related opcodes to work.
+        """
+        self.vx = (self.opcode & 0x0F00) >> 8
+        self.vy = (self.opcode & 0x00F0) >> 4
+
+        self.pc += 2
+
+        self.funcmap[self.opcode & 0xF000]()
+
+        """ Timers
+            Update delay and sound timers
+        """
+        if self.delay_timer > 0:
+            self.delay_timer -= 1
+
+        if self.sound_timer > 0:
+            self.sound_timer -= 1
+            if self.sound_timer == 0:
+                self.buzz.play()
+
+
 
 
