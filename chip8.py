@@ -136,6 +136,10 @@ class Chip8 (pyglet.window.Window):
     def _ANNN(self):
         self.index = self.opcode & 0x0FFF
 
+    # 0xBNNN: Jumps to the address NNN plus V0
+    def _BNNN(self):
+        self.pc = (self.opcode & 0x0FFF) + self.registers[0]
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
