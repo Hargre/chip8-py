@@ -86,6 +86,10 @@ class Chip8 (pyglet.window.Window):
     def _8XY2(self):
         self.registers[self.vx] &= self.registers[self.vy]
 
+    # 0x8XY3: Sets Vx to Vx XOR Vy
+    def _8XY3(self):
+        self.registers[self.vx] ^= self.registers[self.vy]
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
