@@ -216,8 +216,11 @@ class Chip8 (pyglet.window.Window):
 
         self.index += self.registers[self.vx]
 
-        
-    
+    # 0xFX29: Sets I to the location of the sprite for the character in Vx.
+    # Characters are represented by a 4x5 font.
+    def _FX29(self):
+        self.index = self.registers[self.vx] * 0x5
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
