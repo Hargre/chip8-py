@@ -383,5 +383,17 @@ class Chip8 (pyglet.window.Window):
             self.flip()
             self.draw_flag = false
 
+    def on_key_press(self, symbol, modifiers):
+        if symbol in KEY_MAP.keys():
+            self.key[KEY_MAP[symbol]] = 1
+            if self.key_wait:
+                self.key_wait = False
+        else:
+            super(Chip8, self).on_key_press(symbol, modifiers)
+
+    def on_key_release(self, symbol, modifiers):
+        if symbol in KEY_MAP.keys():
+            self.keys[KEY_MAP[symbol]] = 0
+
 
 
