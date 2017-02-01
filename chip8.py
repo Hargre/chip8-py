@@ -71,6 +71,13 @@ class Chip8 (pyglet.window.Window):
     def _7XNN(self):
         self.registers[self.vx] += (self.opcode & 0x00FF)
 
+    def _8NNN(self):
+        self.funcmap[(self.opcode & 0xF00F) + 0xFF0]()
+
+    # 0x8XY0: Sets Vx to Vy
+    def _8XY0(self):
+        self.registers[self.vx] = self.registers[self.vy]
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
