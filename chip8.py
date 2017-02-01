@@ -221,6 +221,13 @@ class Chip8 (pyglet.window.Window):
     def _FX29(self):
         self.index = self.registers[self.vx] * 0x5
 
+    # 0xFX33: Stores the BCD representation of Vx.
+    # Stored at address I (MSD), I + 1, I + 2 (LSD)
+    def _FX33(self):
+        self.memory[self.index]     =  self.registers[self.vx] / 100
+        self.memory[self.index + 1] = (self.registers[self.vx] / 10)  % 10
+        self.memory[self.index + 2] = (self.registers[self.vx] % 100) % 10 
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
