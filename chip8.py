@@ -1,4 +1,5 @@
 import pyglet
+import sys
 import random
 
 from pyglet.sprite import Sprite
@@ -200,7 +201,7 @@ class Chip8 (pyglet.window.Window):
         self.draw_flag = True
 
     def _ENNN(self):
-        self.funcmap(self.opcode & 0xF0FF)()
+        self.funcmap[self.opcode & 0xF0FF]()
 
     # 0xEX9E: Skips instruction if key stored in Vx is pressed
     def _EX9E(self):
@@ -213,7 +214,7 @@ class Chip8 (pyglet.window.Window):
             self.pc += 2
 
     def _FNNN(self):
-        self.funcmap(self.opcode & 0xF0FF)()
+        self.funcmap[self.opcode & 0xF0FF]()
 
     # 0xFX07: Sets Vx to the value of delay timer
     def _FX07(self):
@@ -332,9 +333,10 @@ class Chip8 (pyglet.window.Window):
         self.sound_timer = 0
 
         self.draw_flag = False
+        self.key_wait  = False
 
-        for i in range(len(fontset)):
-            self.memory[i] = fontset[i]
+        for i in range(len(self.fontset)):
+            self.memory[i] = self.fontset[i]
 
     def load_rom(self, rom_path):
         rom = open(rom_path, "rb").read()
@@ -379,9 +381,15 @@ class Chip8 (pyglet.window.Window):
             line_counter = 0
             for i in range(2048):
                 if self.graphics[i] == 1:
-                    self.pixel.blit((i%64)*10, 310 - ((i/64)*10))
+                    self.sprites[i].x = (i%64)*10
+                    self.sprites[i].y = 310 - ((i/64)*10)
+                    self.sprites[i].batch = self.batch
+                else:
+                    self.sprites[i].batch = None
+            self.clear()
+            self.batch.draw()
             self.flip()
-            self.draw_flag = false
+            self.draw_flag = False
 
     def on_key_press(self, symbol, modifiers):
         if symbol in KEY_MAP.keys():
@@ -393,7 +401,20 @@ class Chip8 (pyglet.window.Window):
 
     def on_key_release(self, symbol, modifiers):
         if symbol in KEY_MAP.keys():
-            self.keys[KEY_MAP[symbol]] = 0
+            self.key[KEY_MAP[symbol]] = 0
 
+    def main(self):
+        if len(sys.argv) <= 1:
+            print "Usage: python chip8.py <path to rom>"
+            return
+        self.load_rom(sys.argv[1])
+
+        while not self.has_exit:
+            self.dispatch_events()
+            self.emulate_cycle()
+            self.draw()
+
+emulator = Chip8(640, 320)
+emulator.main()
 
 
