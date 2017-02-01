@@ -132,6 +132,10 @@ class Chip8 (pyglet.window.Window):
         if self.registers[self.vx] != self.registers[self.vy]:
             self.pc += 2
 
+    # 0xANNN: Sets I to the address NNN
+    def _ANNN(self):
+        self.index = self.opcode & 0x0FFF
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
