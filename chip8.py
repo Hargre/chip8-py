@@ -195,8 +195,13 @@ class Chip8 (pyglet.window.Window):
                 self.registers[self.vx] = i
                 key_press = True
 
+        # If no key was pressed, return and repeat next cycle
         if !key_press:
             self.pc -= 2
+
+    # 0xFX15: Set delay timer to Vx
+    def _FX15(self):
+        self.delay_timer = self.registers[self.vx]
 
     def __init__(self):
         self.pc     = 0x200
