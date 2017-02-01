@@ -38,6 +38,10 @@ class Chip8 (pyglet.window.Window):
         self.sp -= 1
         self.pc  = self.stack[self.sp]
 
+    # 0x1NNN: Jumps to address NNN
+    def _1NNN(self):
+        self.pc = self.opcode & 0x0FFF
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
