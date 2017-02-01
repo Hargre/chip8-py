@@ -233,6 +233,11 @@ class Chip8 (pyglet.window.Window):
         for i in range(self.vx + 1):
             self.memory[self.index + i] = self.registers[i]
 
+    # 0xFX65: Fills V0 to Vx (including Vx) with values from memory starting at address I
+    def _FX65(self):
+        for i in range(self.vx + 1):
+            self.registers[i] = self.memory[self.index + i]
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
