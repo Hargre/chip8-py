@@ -20,6 +20,18 @@ class Chip8 (pyglet.window.Window):
         0xF0, 0x80, 0xF0, 0x80, 0x80  # F
     ]
 
+    """ 
+        Definitions for the Opcodes
+    """
+    def _0NNN(self):
+        funcmap[self.opcode & 0xF0FF]()
+
+    # 0x00E0: Clears the screen
+    def _00E0(self):
+        for i in range(len(self.graphics)):
+            self.graphics[i] = 0
+        self.draw_flag = True
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
