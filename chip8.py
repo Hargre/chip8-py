@@ -207,6 +207,17 @@ class Chip8 (pyglet.window.Window):
     def _FX18(self):
         self.sound_timer = self.registers[self.vx]
 
+    # 0xFX1E: Adds Vx to I. Sets VF if in overflow range (undocumented)
+    def _FX1E(self):
+        if self.index + self.registers[self.vx] > 0xFF:
+            self.registers[0xF] = 1
+        else:
+            self.registers[0xF] = 0
+
+        self.index += self.registers[self.vx]
+
+        
+    
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
