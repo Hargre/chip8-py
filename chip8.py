@@ -58,6 +58,11 @@ class Chip8 (pyglet.window.Window):
         if self.registers[self.vx] != (self.opcode & 0x00FF):
             self.pc += 2
 
+    # 0x5XY0: Skips instruction if Vx equals Vy
+    def _5XY0(self):
+        if self.registers[self.vx] == self.registers[self.vy]:
+            self.pc += 2
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
