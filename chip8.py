@@ -144,6 +144,28 @@ class Chip8 (pyglet.window.Window):
     def _CXNN(self):
         self.registers[self.vx] = (self.opcode & 0x00FF) & random.randint(0x0, 0xFF)
 
+    # 0xDXYN: Draws a 8xN sprite at coordinate (Vx, Vy). 
+    # Sets VF to 1 if any pixels are flipped.
+    # Each row of 8 pixels is read starting at memory location I
+    def _DXYN(self):
+        x = self.registers[self.vx]
+        y = self.registers[self.vy]
+
+        height = self.opcode & 0x000F
+        pixel = 0
+
+        self.registers[0xF] = 0
+
+        for y_line in range(height):
+            pixel = self.memory[self.index + y_line]
+            for x_line in range(8):
+                if pixel & (0x80 >> x_line) != 0:
+                    if self.graphics[x + x_line + ((y + y_line) * 64)] == 1:
+                        self.registers[0xF] = 1
+                    self.graphics[x + x_line + ((y + y_line) * 64)] ^= 1
+                    
+        self.draw_flag = True
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
