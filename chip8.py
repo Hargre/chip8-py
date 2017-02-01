@@ -105,8 +105,13 @@ class Chip8 (pyglet.window.Window):
             self.registers[0xF] = 0
         else:
             self.registers[0xF] = 1
-            
+
         self.registers[self.vx] -= self.registers[self.vy]
+
+    # 0x8XY6: Shifts Vx right by one. Sets VF to the LSB of Vx before-shift
+    def _8XY6(self):
+        self.registers[0xF] = self.registers[self.vx] & 0x1
+        self.registers[self.vx] >>= 1
 
     def __init__(self):
         self.pc     = 0x200
