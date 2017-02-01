@@ -228,6 +228,11 @@ class Chip8 (pyglet.window.Window):
         self.memory[self.index + 1] = (self.registers[self.vx] / 10)  % 10
         self.memory[self.index + 2] = (self.registers[self.vx] % 100) % 10 
 
+    # 0xFX55: Stores V0 to Vx (including Vx) in memory, starting at address I
+    def _FX55(self):
+        for i in range(self.vx + 1):
+            self.memory[self.index + i] = self.registers[i]
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
