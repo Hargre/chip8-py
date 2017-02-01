@@ -199,9 +199,13 @@ class Chip8 (pyglet.window.Window):
         if !key_press:
             self.pc -= 2
 
-    # 0xFX15: Set delay timer to Vx
+    # 0xFX15: Sets delay timer to Vx
     def _FX15(self):
         self.delay_timer = self.registers[self.vx]
+
+    # 0xFX18: Sets sound timer to Vx
+    def _FX18(self):
+        self.sound_timer = self.registers[self.vx]
 
     def __init__(self):
         self.pc     = 0x200
