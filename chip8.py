@@ -169,15 +169,22 @@ class Chip8 (pyglet.window.Window):
     def _ENNN(self):
         self.funcmap(self.opcode & 0xF0FF)()
 
-    # Skips instruction if key stored in Vx is pressed
+    # 0xEX9E: Skips instruction if key stored in Vx is pressed
     def _EX9E(self):
-        if self.key[self.vx] != 0:
+        if self.key[self.registers[self.vx]] != 0:
             self.pc += 2
 
-    # Skips instruction if key stored in Vx is not pressed
+    # 0xEXA1: Skips instruction if key stored in Vx is not pressed
     def _EXA1(self):
-        if self.key[self.vx] == 0:
+        if self.key[self.registers[self.vx]] == 0:
             self.pc += 2
+
+    def _FNNN(self):
+        self.funcmap(self.opcode & 0xF0FF)()
+
+    # 0xFX07: Sets Vx to the value of delay timer
+    def _FX07(self):
+        self.registers[self.vx] = self.delay_timer
 
     def __init__(self):
         self.pc     = 0x200
