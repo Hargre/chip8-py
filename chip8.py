@@ -1,5 +1,26 @@
 import pyglet
+import random
 
+from pyglet.sprite import Sprite
+
+KEY_MAP = {
+    pyglet.window.key._1: 0x1,
+    pyglet.window.key._2: 0x2,
+    pyglet.window.key._3: 0x3,
+    pyglet.window.key._4: 0xC,
+    pyglet.window.key.Q:  0x4,
+    pyglet.window.key.W:  0x5,
+    pyglet.window.key.E:  0x6,
+    pyglet.window.key.R:  0xD,
+    pyglet.window.key.A:  0x7,
+    pyglet.window.key.S:  0x8,
+    pyglet.window.key.D:  0x9,
+    pyglet.window.key.F:  0xE,
+    pyglet.window.key.Z:  0xA,
+    pyglet.window.key.X:  0,
+    pyglet.window.key.C:  0xB,
+    pyglet.window.key.V:  0xF
+}
 
 class Chip8 (pyglet.window.Window):
     fontset = [
@@ -20,6 +41,18 @@ class Chip8 (pyglet.window.Window):
         0xF0, 0x80, 0xF0, 0x80, 0xF0,  # E
         0xF0, 0x80, 0xF0, 0x80, 0x80   # F
     ]
+
+    """ 
+        Pyglet resources
+    """
+
+    pixel = pyglet.resource.image('pixel.png')
+    buzz  = pyglet.resource.media('buzz.wav', streaming = False)
+
+    batch = pyglet.graphics.Batch()
+    sprites = []
+    for i in range(0, 2048):
+        sprites.append(pyglet.sprite.Sprite(pixel, batch = batch))
 
     """ 
         Definitions for the Opcodes
@@ -196,7 +229,7 @@ class Chip8 (pyglet.window.Window):
                 key_press = True
 
         # If no key was pressed, return and repeat next cycle
-        if !key_press:
+        if not key_press:
             self.pc -= 2
 
     # 0xFX15: Sets delay timer to Vx
@@ -238,7 +271,9 @@ class Chip8 (pyglet.window.Window):
         for i in range(self.vx + 1):
             self.registers[i] = self.memory[self.index + i]
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(Chip8, self).__init__(*args, **kwargs)
+
         self.funcmap = {
             0x0000: self._0NNN,
             0x00E0: self._00E0,
@@ -280,16 +315,18 @@ class Chip8 (pyglet.window.Window):
             0xF065: self._FX65
         }
 
+        self.clear()
+
         self.pc     = 0x200
         self.opcode = 0
         self.index  = 0
         self.sp     = 0
 
-        self.memory    = [0] * 4096
-        self.registers = [0] * 16
-        self.stack     = [0] * 16
-        self.key       = [0] * 16
-        self.graphics  = [0] * 32 * 64
+        self.memory    = [0]*4096
+        self.registers = [0]*16
+        self.stack     = [0]*16
+        self.key       = [0]*16
+        self.graphics  = [0]*32*64
 
         self.delay_timer = 0
         self.sound_timer = 0
@@ -337,6 +374,14 @@ class Chip8 (pyglet.window.Window):
             if self.sound_timer == 0:
                 self.buzz.play()
 
+    def draw(self):
+        if self.draw_flag:
+            line_counter = 0
+            for i in range(2048):
+                if self.graphics[i] == 1:
+                    self.pixel.blit((i%64)*10, 310 - ((i/64)*10))
+            self.flip()
+            self.draw_flag = false
 
 
 
