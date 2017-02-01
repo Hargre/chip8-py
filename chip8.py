@@ -90,6 +90,14 @@ class Chip8 (pyglet.window.Window):
     def _8XY3(self):
         self.registers[self.vx] ^= self.registers[self.vy]
 
+    # 0x8XY4: Adds Vy to Vx. Sets VF to 1 if there's carry
+    def _8XY4(self):
+        if (self.registers[self.vx] + self.registers[self.vy]) > 0xFF:
+            self.registers[0xF] = 1
+        else:
+            self.registers[0xF] = 0
+        self.registers[self.vx] += self.registers[self.vy]
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
