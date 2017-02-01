@@ -166,6 +166,14 @@ class Chip8 (pyglet.window.Window):
                     
         self.draw_flag = True
 
+    def _ENNN(self):
+        self.funcmap(self.opcode & 0xF0FF)()
+
+    # Skips instruction if key stored in Vx is pressed
+    def _EX9E(self):
+        if self.key[self.vx] != 0:
+            self.pc += 2
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
