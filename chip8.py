@@ -140,6 +140,10 @@ class Chip8 (pyglet.window.Window):
     def _BNNN(self):
         self.pc = (self.opcode & 0x0FFF) + self.registers[0]
 
+    # 0xCXNN: Sets Vx to NN && random number
+    def _CXNN(self):
+        self.registers[self.vx] = (self.opcode & 0x00FF) & random.randint(0x0, 0xFF)
+
     def __init__(self):
         self.pc     = 0x200
         self.opcode = 0
